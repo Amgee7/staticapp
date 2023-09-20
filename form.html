@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form</title>
+</head>
+<body>
+  <h1>Form</h1>
+  <form>
+    <label for="id">id:</label>
+    <input type="text" id="id" required><br><br>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" required><br><br>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" required><br><br>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" required>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select><br><br>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" required><br><br>
+
+    <button type="button" onclick="saveData()">Save</button>
+    <button type="button" onclick="getData()">Get Data</button>
+  </form>
+
+  <div id="output">
+    <ul id="dataList"></ul>
+  </div>
+
+  <script>
+    function saveData() {
+      // Collect form data and create the data object
+      const data = {
+        // Add your form field values here
+        id: document.getElementById('id').value,
+        name: document.getElementById('name').value,
+        age: parseInt(document.getElementById('age').value),
+        gender: document.getElementById('gender').value,
+        address: document.getElementById('address').value
+      };
+      console.log(data)
+      // Create a new XMLHttpRequest object
+      const xhr = new XMLHttpRequest();
+
+      // Configure the request
+      xhr.open('POST', 'https://5ig2n0127l.execute-api.us-east-1.amazonaws.com/amgee/amgeelambda');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      // Handle the response
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          // Data saved successfully
+          alert('Data saved successfully');
+        } else {
+          // Error handling if data saving fails
+          const error = xhr.responseText;
+          alert('Error saving data: ' + error);
+        }
+      };
+
+      // Handle network errors
+      xhr.onerror = function () {
+        console.error('Error saving data:', xhr.status);
+        alert('Error saving data. Please try again later.');
+      };
+
+      // Send the request with the data as JSON string
+      xhr.send(JSON.stringify(data));
+    }
+  </script>
+</body>
+</html>
